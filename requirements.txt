@@ -1,0 +1,28 @@
+--index-url https://download.pytorch.org/whl/cu121
+
+# If a package isn’t found there, fall back to the public PyPI
+--extra-index-url https://pypi.org/simple
+
+torch==2.3.1 
+torchvision==0.18.1 
+torchaudio==2.3.1
+numpy
+opencv-python
+opencv-contrib-python
+pyyaml
+gdown
+numba
+ujson
+scipy
+packaging
+evo
+kornia
+open3d
+pyqtgraph
+PyQt5
+PyOpenGL
+rerun-sdk==0.17.0
+psutil
+ordered-set
+termcolor
+trimesh
