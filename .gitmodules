@@ -43,3 +43,6 @@
 [submodule "thirdparty/patch_netvlad"]
 	path = thirdparty/patch_netvlad
 	url = https://github.com/QVPR/Patch-NetVLAD.git
+[submodule "thirdparty/Deep-corner-tracker"]
+	path = thirdparty/Deep-corner-tracker
+	url = ../Deep-corner-tracker

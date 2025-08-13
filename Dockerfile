@@ -59,11 +59,12 @@ RUN export PYENV_ROOT=$PYENV_ROOT && export PATH=$PYENV_ROOT/bin:$PYENV_ROOT/shi
     pyenv global "$PYENV_VENV_NAME" && \
     python --version && pip --version
 
-COPY . /pyslam
+ENV WORKSPACE=/root/pyslam
+COPY . $WORKSPACE
 # the following to inform we are inside docker at build time 
 RUN touch /.dockerenv 
 
-WORKDIR /pyslam
+WORKDIR $WORKSPACE
 RUN pip install -r requirements.txt
 RUN cd cpp && ./build.sh && cd ..
 RUN cd scripts && ./install_thirdparty.sh && cd ..
