@@ -66,6 +66,7 @@ class FeatureMatcherTypes(SerializableEnum):
     LIGHTGLUE = 5      # "LightGlue: Local Feature Matching at Light Speed"
     LOFTR     = 6      # "LoFTR: Efficient Local Feature Matching with Transformers" (based on kornia)
     MAST3R    = 7      # "Grounding Image Matching in 3D with MASt3R"
+    SPTracker = 8      # "SuperPoint Tracker"
 
 
 def feature_matcher_factory(norm_type=cv2.NORM_HAMMING, 

@@ -50,8 +50,7 @@ class FeatureTrackerTypes(SerializableEnum):
     LIGHTGLUE = 4   # LightGlue, "LightGlue: Local Feature Matching at Light Speed"
     LOFTR     = 5   # "LoFTR: Efficient Local Feature Matching with Transformers" (Detector-Free)
     MAST3R    = 6   # "Grounding Image Matching in 3D with MASt3R" (Detector-Free)
-
-
+    SPTracker = 7   
 def feature_tracker_factory(num_features=kMinNumFeatureDefault, 
                             num_levels = 1,                                 # number of pyramid levels or octaves for detector and descriptor   
                             scale_factor = 1.2,                             # detection scale factor (if it can be set, otherwise it is automatically computed)
@@ -87,7 +86,16 @@ def feature_tracker_factory(num_features=kMinNumFeatureDefault,
                                         detector_type = detector_type, 
                                         descriptor_type = descriptor_type,
                                         match_ratio_test = match_ratio_test,    
-                                        tracker_type = tracker_type)        
+                                        tracker_type = tracker_type)
+    elif tracker_type == FeatureTrackerTypes.SPTracker:
+        return SPFeatureTracker(num_features=num_features, 
+                                        num_levels = num_levels, 
+                                        scale_factor = scale_factor,
+                                        sigma_level0 = sigma_level0, 
+                                        detector_type = detector_type, 
+                                        descriptor_type = descriptor_type,
+                                        match_ratio_test = match_ratio_test,    
+                                        tracker_type = tracker_type)
     else: 
         return DescriptorFeatureTracker(num_features=num_features, 
                                         num_levels = num_levels, 
@@ -230,7 +238,55 @@ class LkFeatureTracker(FeatureTracker):
         res.des_ref = None
         res.des_cur = None                      
         return res         
+
+# =======================================================
+
+class SPFeatureTracker(FeatureTracker):
+    def __init__(self, num_features=kMinNumFeatureDefault, 
+                       num_levels = 1,                             # number of pyramid levels for detector  
+                       scale_factor = 1.2,                         # detection scale factor (if it can be set, otherwise it is automatically computed) 
+                       sigma_level0 = Parameters.kSigmaLevel0,     # sigma of the keypoint localization at level 0 
+                       detector_type = FeatureDetectorTypes.SUPERPOINT, 
+                       descriptor_type = FeatureDescriptorTypes.NONE, 
+                       match_ratio_test = kDefaultRatioTest,
+                       tracker_type = FeatureTrackerTypes.SPTracker):                         
+        super().__init__(num_features=num_features, 
+                         num_levels=num_levels, 
+                         scale_factor=scale_factor, 
+                         sigma_level0 = sigma_level0,
+                         detector_type=detector_type, 
+                         descriptor_type=descriptor_type, 
+                         tracker_type=tracker_type)
+        self.feature_manager = feature_manager_factory(num_features=num_features, 
+                                                       num_levels=num_levels, 
+                                                       scale_factor=scale_factor, 
+                                                       sigma_level0 = sigma_level0,
+                                                       detector_type=detector_type, 
+                                                       descriptor_type=descriptor_type)   
+        self.matcher_type = FeatureMatcherTypes.SPTracker
         
+        configs ={}
+        self.tracker = SuperCornerTracker(configs)     
+
+    # out: keypoints and empty descriptors
+    def detectAndCompute(self, frame, mask=None):
+        return self.feature_manager.detect(frame, mask), None  
+
+    # out: FeatureTrackingResult()
+    def track(self, image_ref, image_cur, kps_ref, des_ref = None):
+        kps_cur = self.tracker.track(image_ref, image_cur, kps_ref) #shape: [k,2] [k,1] [k,1]
+        import sys; sys.exit()
+        res = FeatureTrackingResult()    
+        #res.idxs_ref = (st == 1)
+        res.idxs_ref = [i for i,v in enumerate(st) if v== 1]
+        res.idxs_cur = res.idxs_ref.copy()       
+        res.kps_ref_matched = kps_ref[res.idxs_ref] 
+        res.kps_cur_matched = kps_cur[res.idxs_cur]  
+        res.kps_ref = res.kps_ref_matched  # with LK we follow feature trails hence we can forget unmatched features 
+        res.kps_cur = res.kps_cur_matched
+        res.des_ref = None
+        res.des_cur = None                      
+        return res    
         
 # =======================================================
 

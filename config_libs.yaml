@@ -26,6 +26,7 @@ LIB_PATHS:
   # import pyslam.config as config \ config.cfg.set_lib('tfeat')
   lightglue: thirdparty/LightGlue
   xfeat: thirdparty/accelerated_features
+  superpointracker: thirdparty/Deep-corner-tracker
   superpoint: thirdparty/superpoint
   hardnet: thirdparty/hardnet
   tfeat: thirdparty/tfeat

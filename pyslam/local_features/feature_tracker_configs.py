@@ -78,6 +78,13 @@ class FeatureTrackerConfigs:
                    descriptor_type = FeatureDescriptorTypes.NONE, 
                    sigma_level0 = Parameters.kSigmaLevel0,                    
                    tracker_type = FeatureTrackerTypes.LK)
+    
+    SPTracker = dict(num_features=kNumFeatures,
+                   num_levels = 1,
+                   detector_type = FeatureDetectorTypes.SUPERPOINT, 
+                   descriptor_type = FeatureDescriptorTypes.NONE, 
+                   sigma_level0 = Parameters.kSigmaLevel0,                    
+                   tracker_type = FeatureTrackerTypes.SPTracker)
 
 
     # =====================================
