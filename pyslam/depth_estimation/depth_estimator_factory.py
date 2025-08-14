@@ -34,11 +34,11 @@ from pyslam.utilities.utils_sys import import_from
 from pyslam.utilities.utils_serialization import SerializableEnum, register_class
 
 from .depth_estimator_base import DepthEstimator, DepthEstimatorSgbm
-from .depth_estimator_depth_pro import DepthEstimatorDepthPro
-from .depth_estimator_depth_anything_v2 import DepthEstimatorDepthAnythingV2
-from .depth_estimator_raft_stereo import DepthEstimatorRaftStereo
-from .depth_estimator_crestereo_megengine import DepthEstimatorCrestereoMegengine
-from .depth_estimator_crestereo_pytorch import DepthEstimatorCrestereoPytorch
+# from .depth_estimator_depth_pro import DepthEstimatorDepthPro
+# from .depth_estimator_depth_anything_v2 import DepthEstimatorDepthAnythingV2
+# from .depth_estimator_raft_stereo import DepthEstimatorRaftStereo
+# from .depth_estimator_crestereo_megengine import DepthEstimatorCrestereoMegengine
+# from .depth_estimator_crestereo_pytorch import DepthEstimatorCrestereoPytorch
 
 
 kScriptPath = os.path.realpath(__file__)
@@ -78,38 +78,38 @@ def depth_estimator_factory(depth_estimator_type=DepthEstimatorType.DEPTH_ANYTHI
         return DepthEstimatorDepthAnythingV2(device=device, camera=camera, 
                                              min_depth=min_depth, max_depth=max_depth, 
                                              dataset_env_type=dataset_env_type, precision=precision)
-    elif depth_estimator_type == DepthEstimatorType.DEPTH_PRO:
-        return DepthEstimatorDepthPro(device=device, camera=camera, 
-                                      max_depth=max_depth, 
-                                      dataset_env_type=dataset_env_type, precision=precision)
-    elif depth_estimator_type == DepthEstimatorType.DEPTH_SGBM:
-        return DepthEstimatorSgbm(device=device, camera=camera, 
-                                  min_depth=min_depth, max_depth=max_depth, 
-                                  dataset_env_type=dataset_env_type)
-    elif depth_estimator_type == DepthEstimatorType.DEPTH_RAFT_STEREO:
-        return DepthEstimatorRaftStereo(device=device, camera=camera, 
-                                  min_depth=min_depth, max_depth=max_depth, 
-                                  dataset_env_type=dataset_env_type)
-    elif depth_estimator_type == DepthEstimatorType.DEPTH_CRESTEREO_MEGENGINE:
-        if platform.system() == 'Darwin':
-            raise ValueError('DepthEstimatorType.DEPTH_CRESTEREO_MEGENGINE is not supported on macOS. Use DepthEstimatorType.DEPTH_CRESTEREO_PYTORCH instead!')
-        return DepthEstimatorCrestereoMegengine(device=device, camera=camera, 
-                                       min_depth=min_depth, max_depth=max_depth, 
-                                       dataset_env_type=dataset_env_type)
-    elif depth_estimator_type == DepthEstimatorType.DEPTH_CRESTEREO_PYTORCH:
-        return DepthEstimatorCrestereoPytorch(device=device, camera=camera, 
-                                              min_depth=min_depth, max_depth=max_depth, 
-                                              dataset_env_type=dataset_env_type)
-    elif depth_estimator_type == DepthEstimatorType.DEPTH_MAST3R:
-        from pyslam.depth_estimation.depth_estimator_mast3r import DepthEstimatorMast3r # available only with CUDA       
-        return DepthEstimatorMast3r(device=device, camera=camera, 
-                                    min_depth=min_depth, max_depth=max_depth, 
-                                    dataset_env_type=dataset_env_type)
-    elif depth_estimator_type == DepthEstimatorType.DEPTH_MVDUST3R:
-        from pyslam.depth_estimation.depth_estimator_mvdust3r import DepthEstimatorMvdust3r # available only with CUDA      
-        return DepthEstimatorMvdust3r(device=device, camera=camera, 
-                                    min_depth=min_depth, max_depth=max_depth, 
-                                    dataset_env_type=dataset_env_type)
+    # elif depth_estimator_type == DepthEstimatorType.DEPTH_PRO:
+    #     return DepthEstimatorDepthPro(device=device, camera=camera, 
+    #                                   max_depth=max_depth, 
+    #                                   dataset_env_type=dataset_env_type, precision=precision)
+    # elif depth_estimator_type == DepthEstimatorType.DEPTH_SGBM:
+    #     return DepthEstimatorSgbm(device=device, camera=camera, 
+    #                               min_depth=min_depth, max_depth=max_depth, 
+    #                               dataset_env_type=dataset_env_type)
+    # elif depth_estimator_type == DepthEstimatorType.DEPTH_RAFT_STEREO:
+    #     return DepthEstimatorRaftStereo(device=device, camera=camera, 
+    #                               min_depth=min_depth, max_depth=max_depth, 
+    #                               dataset_env_type=dataset_env_type)
+    # elif depth_estimator_type == DepthEstimatorType.DEPTH_CRESTEREO_MEGENGINE:
+    #     if platform.system() == 'Darwin':
+    #         raise ValueError('DepthEstimatorType.DEPTH_CRESTEREO_MEGENGINE is not supported on macOS. Use DepthEstimatorType.DEPTH_CRESTEREO_PYTORCH instead!')
+    #     return DepthEstimatorCrestereoMegengine(device=device, camera=camera, 
+    #                                    min_depth=min_depth, max_depth=max_depth, 
+    #                                    dataset_env_type=dataset_env_type)
+    # elif depth_estimator_type == DepthEstimatorType.DEPTH_CRESTEREO_PYTORCH:
+    #     return DepthEstimatorCrestereoPytorch(device=device, camera=camera, 
+    #                                           min_depth=min_depth, max_depth=max_depth, 
+    #                                           dataset_env_type=dataset_env_type)
+    # elif depth_estimator_type == DepthEstimatorType.DEPTH_MAST3R:
+    #     from pyslam.depth_estimation.depth_estimator_mast3r import DepthEstimatorMast3r # available only with CUDA       
+    #     return DepthEstimatorMast3r(device=device, camera=camera, 
+    #                                 min_depth=min_depth, max_depth=max_depth, 
+    #                                 dataset_env_type=dataset_env_type)
+    # elif depth_estimator_type == DepthEstimatorType.DEPTH_MVDUST3R:
+    #     from pyslam.depth_estimation.depth_estimator_mvdust3r import DepthEstimatorMvdust3r # available only with CUDA      
+    #     return DepthEstimatorMvdust3r(device=device, camera=camera, 
+    #                                 min_depth=min_depth, max_depth=max_depth, 
+    #                                 dataset_env_type=dataset_env_type)
     else:
         raise ValueError(f'Invalid depth estimator type: {depth_estimator_type}')
 

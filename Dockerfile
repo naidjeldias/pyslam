@@ -65,7 +65,7 @@ COPY . $WORKSPACE
 RUN touch /.dockerenv 
 
 WORKDIR $WORKSPACE
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 RUN cd cpp && ./build.sh && cd ..
 RUN cd scripts && ./install_thirdparty.sh && cd ..
 

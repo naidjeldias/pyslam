@@ -27,6 +27,7 @@ rocker $RENDERER  --x11 \
   --network host \
   --oyr-run-arg "--privileged \
                 -v $SCRIPT_DIR/main_vo.py:/root/pyslam/main_vo.py:rw \
+                -v $SCRIPT_DIR/main_slam.py:/root/pyslam/main_slam.py:rw \
                 -v $SCRIPT_DIR/pyslam:/root/pyslam/pyslam:rw \
                 -v $SCRIPT_DIR/thirdparty/superpoint:/root/pyslam/thirdparty/superpoint:rw \
                 -v $SCRIPT_DIR/thirdparty/Deep-corner-tracker:/root/pyslam/thirdparty/Deep-corner-tracker:rw \

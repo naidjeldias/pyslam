@@ -140,30 +140,30 @@ fi
 cd $ROOT_DIR
 
 
-# print_blue "=================================================================="
-# print_blue "Configuring and building thirdparty/pydbow3 ..."
+print_blue "=================================================================="
+print_blue "Configuring and building thirdparty/pydbow3 ..."
 
-# cd thirdparty/pydbow3
-# ./build.sh $EXTERNAL_OPTIONS
+cd thirdparty/pydbow3
+./build.sh $EXTERNAL_OPTIONS
 
-# cd $ROOT_DIR
+cd $ROOT_DIR
 
-# print_blue "=================================================================="
-# print_blue "Configuring and building thirdparty/pydbow2 ..."
+print_blue "=================================================================="
+print_blue "Configuring and building thirdparty/pydbow2 ..."
 
-# cd thirdparty/pydbow2
-# ./build.sh $EXTERNAL_OPTIONS
+cd thirdparty/pydbow2
+./build.sh $EXTERNAL_OPTIONS
 
-# cd $ROOT_DIR
+cd $ROOT_DIR
 
 
-# print_blue "=================================================================="
-# print_blue "Configuring and building thirdparty/pyibow ..."
+print_blue "=================================================================="
+print_blue "Configuring and building thirdparty/pyibow ..."
 
-# cd thirdparty/pyibow
-# ./build.sh $EXTERNAL_OPTIONS
+cd thirdparty/pyibow
+./build.sh $EXTERNAL_OPTIONS
 
-# cd $ROOT_DIR
+cd $ROOT_DIR
 
 
 if [[ "$OSTYPE" == darwin* ]]; then
