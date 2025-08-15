@@ -128,20 +128,23 @@ class VisualOdometryEducational(VisualOdometryBase):
     def process_first_frame(self, frame_id) -> None:
         # convert image to gray if needed    
         if self.cur_image.ndim>2:
-            self.cur_image = cv2.cvtColor(self.cur_image,cv2.COLOR_RGB2GRAY)                
+            self.cur_image_gray = cv2.cvtColor(self.cur_image,cv2.COLOR_RGB2GRAY)                
         # only detect on the current image 
-        self.kps_ref, self.des_ref = self.feature_tracker.detectAndCompute(self.cur_image)
+        self.kps_ref, self.des_ref = self.feature_tracker.detectAndCompute(self.cur_image_gray)
         # convert from list of keypoints to an array of points 
         self.kps_ref = np.array([x.pt for x in self.kps_ref], dtype=np.float32) if self.kps_ref is not None else None
-        self.draw_img = self.drawFeatureTracks(self.cur_image)
+        self.draw_img = self.drawFeatureTracks(self.cur_image_gray)
 
     def process_frame(self, frame_id) -> None:
         # convert image to gray if needed    
         if self.cur_image.ndim>2:
-            self.cur_image = cv2.cvtColor(self.cur_image,cv2.COLOR_RGB2GRAY)                
+            self.cur_image_gray = cv2.cvtColor(self.cur_image,cv2.COLOR_RGB2GRAY)                
         # track features 
         self.timer_feat.start()
-        self.track_result = self.feature_tracker.track(self.prev_image, self.cur_image, self.kps_ref, self.des_ref)
+        if self.feature_tracker.tracker_type == FeatureTrackerTypes.SPTracker:
+            self.track_result = self.feature_tracker.track(self.prev_image, self.cur_image, self.kps_ref, self.des_ref)
+        else:
+            self.track_result = self.feature_tracker.track(self.prev_image_gray, self.cur_image_gray, self.kps_ref, self.des_ref)
         self.timer_feat.refresh()
         # estimate pose 
         self.timer_pose_est.start()
@@ -176,9 +179,9 @@ class VisualOdometryEducational(VisualOdometryBase):
                 self.cur_R = closest_rotation_matrix(self.cur_R)
             self.cur_t = self.cur_t + absolute_scale*self.cur_R @ t
         # draw image         
-        self.draw_img = self.drawFeatureTracks(self.cur_image) 
+        self.draw_img = self.drawFeatureTracks(self.cur_image_gray) 
         # check if we have enough features to track otherwise detect new ones and start tracking from them (used for LK tracker) 
-        if (self.feature_tracker.tracker_type == FeatureTrackerTypes.LK) and (self.kps_ref.shape[0] < self.feature_tracker.num_features): 
+        if (self.feature_tracker.tracker_type == FeatureTrackerTypes.LK or self.feature_tracker.tracker_type == FeatureTrackerTypes.SPTracker) and (self.kps_ref.shape[0] < self.feature_tracker.num_features): 
             self.kps_cur, self.des_cur = self.feature_tracker.detectAndCompute(self.cur_image)           
             self.kps_cur = np.array([x.pt for x in self.kps_cur], dtype=np.float32) # convert from list of keypoints to an array of points   
             if kVerbose:     

@@ -35,7 +35,11 @@ if TYPE_CHECKING:
     from .feature_tracker import FeatureTracker  
     from .feature_matcher import FeatureMatcher
     from .feature_manager import FeatureManager
-    
+
+import pyslam.config as config
+config.cfg.set_lib('superpointracker', verbose=True) 
+from  deep_corner_tracker.tracker_wrapper import SCTracker
+
     
 kMinNumFeatureDefault = 2000
 kLkPyrOpticFlowNumLevelsMin = 3   # maximal pyramid level number for LK optic flow 
@@ -265,8 +269,33 @@ class SPFeatureTracker(FeatureTracker):
                                                        descriptor_type=descriptor_type)   
         self.matcher_type = FeatureMatcherTypes.SPTracker
         
-        configs ={}
-        self.tracker = SuperCornerTracker(configs)     
+        configs ={
+            "data": {
+                "clips":{
+                    "clip_length": 4,
+                    "step_between_clips": 4
+                },
+                "transforms": {
+                    "resize": [256, 256],
+                    "patch_size": 32
+                },
+                "augmentation": {
+                    "photometric": {
+                        "enable": True,
+                        "weak_augs_prob": 0.5,
+                        "strong_augs_prob": 0.25,
+                        "params": {
+                            "random_brightness": {"max_abs_change": 50},
+                            "random_contrast": {"strength_range": [0.5, 1.5]},
+                            "additive_gaussian_noise": {"stddev_range": [0, 10]},
+                            "additive_speckle_noise": {"prob_range": [0, 0.0035]},
+                            "motion_blur": {"max_kernel_size": 3}   
+                        }
+                    }
+                }
+            }
+        }
+        self.tracker = SCTracker(configs)     
 
     # out: keypoints and empty descriptors
     def detectAndCompute(self, frame, mask=None):
@@ -274,11 +303,11 @@ class SPFeatureTracker(FeatureTracker):
 
     # out: FeatureTrackingResult()
     def track(self, image_ref, image_cur, kps_ref, des_ref = None):
-        kps_cur = self.tracker.track(image_ref, image_cur, kps_ref) #shape: [k,2] [k,1] [k,1]
-        import sys; sys.exit()
+        kps_cur, st = self.tracker.track(image_ref, image_cur, kps_ref) #shape: [k,2] [k,1] [k,1]
+
         res = FeatureTrackingResult()    
         #res.idxs_ref = (st == 1)
-        res.idxs_ref = [i for i,v in enumerate(st) if v== 1]
+        res.idxs_ref = [i for i,v in enumerate(st) if v]
         res.idxs_cur = res.idxs_ref.copy()       
         res.kps_ref_matched = kps_ref[res.idxs_ref] 
         res.kps_cur_matched = kps_cur[res.idxs_cur]  

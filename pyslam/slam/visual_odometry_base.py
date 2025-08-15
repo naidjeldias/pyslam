@@ -45,12 +45,16 @@ class VisualOdometryBase:
         self.sensor_type = cam.sensor_type if cam is not None else SensorType.MONOCULAR
         
         self.cur_image = None   # current image
+        self.cur_image_gray = None
         self.cur_image_right = None  # current right image (if stereo)
+        self.cur_image_right_gray = None
         self.cur_depth = None   # current depth image
         self.cur_timestamp = None
 
         self.prev_image = None  # previous/reference image
+        self.prev_image_gray = None
         self.prev_image_right = None  # previous/reference right image (if stereo)
+        self.prev_image_right_gray = None
         self.prev_depth = None  # previous/reference depth image
         self.prev_timestamp = None        
 
@@ -118,6 +122,7 @@ class VisualOdometryBase:
             self.process_first_frame(frame_id)
             self.state = VoState.GOT_FIRST_IMAGE            
         self.prev_image = self.cur_image 
+        self.prev_image_gray = self.cur_image_gray
         self.prev_image_right = self.cur_image_right   
         self.prev_depth = self.cur_depth
         self.prev_timestamp = self.cur_timestamp

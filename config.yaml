@@ -2,11 +2,11 @@ DATASET:
   # select your dataset (decomment only one of the following lines) 
   #type: EUROC_DATASET  
   #type: KITTI_DATASET
-  #type: TUM_DATASET
+  type: TUM_DATASET
   #type: ICL_NUIM_DATASET
   #type: REPLICA_DATASET
   #type: TARTANAIR_DATASET
-  type: VIDEO_DATASET
+  # type: VIDEO_DATASET
   #type: SCANNET_DATASET
   #type: ROS1BAG_DATASET
   #type: ROS2BAG_DATASET  
@@ -31,8 +31,8 @@ KITTI_DATASET:
 
 TUM_DATASET:
   type: tum
-  sensor_type: rgbd # Here, 'sensor_type' can be 'mono' or 'rgbd'
-  base_path: /home/luigi/Work/datasets/rgbd_datasets/tum
+  sensor_type: mono # Here, 'sensor_type' can be 'mono' or 'rgbd'
+  base_path: /root/data/TUM
   #
   name: rgbd_dataset_freiburg3_long_office_household
   settings: settings/TUM3.yaml # do not forget to correctly set the corresponding camera settings file    
